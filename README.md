@@ -1,5 +1,4 @@
-# 
-HeadHunterSchool homework: 3. Unit testing
+# HeadHunterSchool homework: 3. Unit testing
 ---------
 
 ## Программа подсчета очков в боулинг
