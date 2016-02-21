@@ -1,0 +1,173 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Game</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">bowling</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Game (bowling)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Game</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/ 16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (38/ 38)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/**
+<i>2</i>&nbsp; * Created by Iskuskov on 15.02.2016.
+<i>3</i>&nbsp; */
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;package bowling;
+<i>6</i>&nbsp;
+<b class="fc"><i>7</i>&nbsp;public class Game {</b>
+<i>8</i>&nbsp;
+<b class="fc"><i>9</i>&nbsp;    private int m_currentFrame = 0;</b>
+<b class="fc"><i>10</i>&nbsp;    private int m_rollNumberInFrame = 0;</b>
+<b class="fc"><i>11</i>&nbsp;    private int m_remainingPinsInFrame = Scorer.c_maxFrameScore;</b>
+<b class="fc"><i>12</i>&nbsp;    private boolean m_extraAttempt = false;</b>
+<b class="fc"><i>13</i>&nbsp;    private Scorer m_scorer = new Scorer();</b>
+<i>14</i>&nbsp;
+<b class="fc"><i>15</i>&nbsp;    public int currentFrame() { return m_currentFrame; }</b>
+<b class="fc"><i>16</i>&nbsp;    public int remainingPinsInFrame() {return m_remainingPinsInFrame; }</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    public int score() {
+<b class="fc"><i>19</i>&nbsp;        return scoreForFrame(m_currentFrame);</b>
+<i>20</i>&nbsp;    }
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    public int scoreForFrame(int _frame) {
+<b class="fc"><i>23</i>&nbsp;        return m_scorer.scoreForFrame(_frame);</b>
+<i>24</i>&nbsp;    }
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    // For testMockedMethod()
+<i>27</i>&nbsp;    public int scoreForFrame(Scorer scorer, int _frame) {
+<b class="fc"><i>28</i>&nbsp;        return scorer.scoreForFrame(_frame);</b>
+<i>29</i>&nbsp;    }
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    public void add(int _pins) throws IllegalArgumentException {
+<i>32</i>&nbsp;
+<b class="fc"><i>33</i>&nbsp;        if (_pins &gt;= 0 &amp;&amp; _pins &lt;= m_remainingPinsInFrame) {</b>
+<b class="fc"><i>34</i>&nbsp;            m_scorer.addRoll(_pins);</b>
+<b class="fc"><i>35</i>&nbsp;            adjustCurrentFrame(_pins);</b>
+<i>36</i>&nbsp;        } else {
+<b class="fc"><i>37</i>&nbsp;            throw new IllegalArgumentException();</b>
+<i>38</i>&nbsp;        }
+<b class="fc"><i>39</i>&nbsp;    }</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    private void adjustCurrentFrame(int _pins) {
+<b class="fc"><i>42</i>&nbsp;        processCurrentFrame(_pins);</b>
+<b class="fc"><i>43</i>&nbsp;        if (isLastBallInFrame()) {</b>
+<b class="fc"><i>44</i>&nbsp;            moveToNextFrame();</b>
+<i>45</i>&nbsp;        }
+<b class="fc"><i>46</i>&nbsp;    }</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    private void processCurrentFrame(int _pins) {
+<b class="fc"><i>49</i>&nbsp;        ++m_rollNumberInFrame;</b>
+<b class="fc"><i>50</i>&nbsp;        m_remainingPinsInFrame -= _pins;</b>
+<b class="fc"><i>51</i>&nbsp;        if (isLastFrame() &amp;&amp; m_remainingPinsInFrame == 0) {</b>
+<b class="fc"><i>52</i>&nbsp;            m_remainingPinsInFrame = Scorer.c_maxFrameScore;</b>
+<b class="fc"><i>53</i>&nbsp;            m_extraAttempt = true;</b>
+<i>54</i>&nbsp;        }
+<b class="fc"><i>55</i>&nbsp;    }</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    private void moveToNextFrame() {
+<b class="fc"><i>58</i>&nbsp;        m_currentFrame = Math.min(10, m_currentFrame + 1);</b>
+<b class="fc"><i>59</i>&nbsp;        m_rollNumberInFrame = 0;</b>
+<b class="fc"><i>60</i>&nbsp;        m_remainingPinsInFrame = Scorer.c_maxFrameScore;</b>
+<b class="fc"><i>61</i>&nbsp;    }</b>
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    public boolean isStartOfFrame() {
+<b class="fc"><i>64</i>&nbsp;        return m_rollNumberInFrame == 0  /* &amp;&amp; m_remainingPinsInFrame = Scorer.c_maxFrameScore */;</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    public boolean isLastBallInFrame() {
+<b class="fc"><i>68</i>&nbsp;        if (isLastFrame()) {</b>
+<b class="fc"><i>69</i>&nbsp;            return ((m_rollNumberInFrame == 2 &amp;&amp; !m_extraAttempt) || (m_rollNumberInFrame == 3));</b>
+<i>70</i>&nbsp;        } else {
+<b class="fc"><i>71</i>&nbsp;            return (isStrike() || m_rollNumberInFrame == 2);</b>
+<i>72</i>&nbsp;        }
+<i>73</i>&nbsp;    }
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    public boolean isGameFinished() {
+<b class="fc"><i>76</i>&nbsp;        return m_currentFrame == 10;</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    public int currentRollPositionNumber() {
+<b class="fc"><i>80</i>&nbsp;        return m_currentFrame * 2 + m_rollNumberInFrame;</b>
+<i>81</i>&nbsp;    }
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    private boolean isLastFrame() {
+<b class="fc"><i>84</i>&nbsp;        return m_currentFrame == 9;</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    private boolean isStrike() {
+<b class="fc"><i>88</i>&nbsp;        return (m_rollNumberInFrame == 1 &amp;&amp; m_remainingPinsInFrame == 0);</b>
+<i>89</i>&nbsp;    }
+<i>90</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2016-02-17 16:56</div>
+</div>
+</body>
+</html>
